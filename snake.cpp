@@ -10,10 +10,13 @@ int cellCount=25;
 class Food{
   public:
   Vector2 position={5 , 6};
+  Texture2D texture;
   Food()
   {
     // Image is type of data structure in raylib that contains the pixels data of the graphical image 
-    Image image=LoadImage("./Graphics/Images.jpg"); 
+    Image image= LoadImage("./Graphics/Images.jpg");
+    texture =LoadTextureFromImage(image);
+    UnloadImage(image); 
   }
   void draw()
   {
