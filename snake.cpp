@@ -6,8 +6,11 @@
 
 
 Color green = {173, 204, 96, 255};
+
 Color darkgreen = {43, 51, 24, 255};
+
 using namespace std;
+
 int cellSize = 30;
 int cellCount = 25;
 
@@ -84,19 +87,51 @@ public:
     body.push_front(Vector2Add(body[0], direction));
 
     // check whther snake head touches the end of the window 
-   if(body[0].x * cellSize >=GetScreenWidth() || body[0].x * cellSize<=0)a=true;
-   if(body[0].y * cellSize >=GetScreenHeight() || body[0].y * cellSize<=0) a=true;
+   if(body[0].x * cellSize >=GetScreenWidth()+cellSize || body[0].x * cellSize<=0-cellSize)a=true;
+   if(body[0].y * cellSize >=GetScreenHeight()+cellSize || body[0].y * cellSize<=0-cellSize) a=true;
   }
 };
+
+
+class Game{
+
+  public:
+  snake Snake=snake();
+  Food food=Food();
+  
+  // create a draw function into it 
+  void Draw(){
+    food.draw();
+    Snake.draw();
+  }
+  
+  void update(){
+    Snake.update();
+  }
+
+  void randomposition()
+  {
+     if (Snake.body[0] == food.position)
+    {
+      // increase the size of the snake
+      Snake.body.push_front(Vector2Add(food.position, Snake.direction));
+     food.position=food.GetRandomPosition();
+    }
+  }
+};
+
 int main()
 {
+
+  
   int screen_wdith = 750;
   int screen_height = 750;
   SetTargetFPS(60);
   InitWindow(cellSize * cellCount, cellSize * cellCount, "My snake game");
 
-  Food food = Food();
-  snake Snake = snake();
+  // Food food=Food();
+  // snake Snake=snake();
+  Game game=Game();
   while (!WindowShouldClose())
   {
     BeginDrawing();
@@ -105,26 +140,21 @@ int main()
     }
     if (eventTriggered(0.3))
     {
-      Snake.update();
+      game.update();
     }
-    if (IsKeyPressed(KEY_UP) && Snake.direction.y != 1)
-      Snake.direction = {0, -1};
-    if (IsKeyPressed(KEY_DOWN) && Snake.direction.y != -1)
-      Snake.direction = {0, 1};
-    if (IsKeyPressed(KEY_RIGHT) && Snake.direction.x != -1)
-      Snake.direction = {1, 0};
-    if (IsKeyPressed(KEY_LEFT) && Snake.direction.x != 1)
-      Snake.direction = {-1, 0};
+    if (IsKeyPressed(KEY_UP) && game.Snake.direction.y != 1)
+       game.Snake.direction = {0, -1};
+    if (IsKeyPressed(KEY_DOWN) &&  game.Snake.direction.y != -1)
+       game.Snake.direction = {0, 1};
+    if (IsKeyPressed(KEY_RIGHT) &&  game.Snake.direction.x != -1)
+       game.Snake.direction = {1, 0};
+    if (IsKeyPressed(KEY_LEFT) &&  game.Snake.direction.x != 1)
+       game.Snake.direction = {-1, 0};
 
     ClearBackground(green);
-    if (Snake.body[0] == food.position)
-    {
-      // increase the size of the snake
-      Snake.body.push_front(Vector2Add(food.position, Snake.direction));
-      food.position=food.GetRandomPosition();
-    }
-    food.draw();
-    Snake.draw();
+    game.randomposition();
+    game.food.draw();
+    game.Snake.draw();
 
     EndDrawing();
   }
