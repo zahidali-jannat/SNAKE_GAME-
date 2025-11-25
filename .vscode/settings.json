@@ -2,6 +2,11 @@
     "files.associations": {
         "*.dbclient-js": "javascript",
         "iostream": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "ranges": "cpp",
+        "span": "cpp"
     }
 }

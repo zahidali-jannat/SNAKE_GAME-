@@ -17,6 +17,14 @@ int cellCount = 25;
 double LastUpdateTime = 0;
 
 bool a=false;
+bool ElementInDeque(Vector2 element , deque<Vector2> dq){
+  for(int i; i<dq.size(); i++)
+  {
+    if(Vector2Equals(dq[i] , element)) return true;
+  
+  }
+  return false;
+}
 bool eventTriggered(double interval)
 {
   double CURRENT_TIME = GetTime(); // get the current time with this function
@@ -56,7 +64,19 @@ public:
   {
     float x = GetRandomValue(0, cellCount - 1);
     float y = GetRandomValue(0, cellCount - 1);
+    
     return Vector2{x, y};
+  }
+
+  Vector2 Generation_of_random_position(deque<Vector2> SnakeBody){
+    Vector2 position=GetRandomPosition();
+
+    while(ElementInDeque(position ,SnakeBody))
+    {
+     position=GetRandomPosition();
+    }
+    return position;
+
   }
 };
 
@@ -115,7 +135,7 @@ class Game{
     {
       // increase the size of the snake
       Snake.body.push_front(Vector2Add(food.position, Snake.direction));
-     food.position=food.GetRandomPosition();
+      food.position=food.Generation_of_random_position(Snake.body);
     }
   }
 };
